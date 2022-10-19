@@ -1,2 +1,2 @@
 # Meta-Learning
-RNN Learning to Learn with Omniglot
+RNN Learning to Learn with Omniglot.
