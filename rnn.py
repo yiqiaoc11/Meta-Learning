@@ -12,7 +12,7 @@ from google_drive_downloader import GoogleDriveDownloader as gdd
 from torch.utils.tensorboard import SummaryWriter
 import torchvision
 import pdb
-import nni
+
 from nni.utils import merge_parameter
 import logging
 
@@ -163,7 +163,7 @@ def main(config):
         ## Sample Batch
         t0 = time.time()        
         i, l = next(train_loader)
-        # i, l = i.to(device), l.to(device)
+        i, l = i.to(device), l.to(device)
 
         t1 = time.time()
 
@@ -190,19 +190,11 @@ def main(config):
             print("Test Accuracy", acc)
             writer.add_scalar("Accuracy/test", acc, step)
                     # report intermediate result
-            nni.report_intermediate_result(acc)
-            logger.debug('test accuracy %g', acc)
-            logger.debug('Pipe send intermediate result done.')
+
 
             times = np.array(times)
             print(f"Sample time {times[:, 0].mean()} Train time {times[:, 1].mean()}")
             times = []
-
-        # report final result
-    nni.report_final_result(acc)
-    logger.debug('Final result is %g', acc)
-    logger.debug('Send final result done.')
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -217,18 +209,5 @@ if __name__ == "__main__":
     parser.add_argument("--train_steps", type=int, default=25000)
     parser.add_argument("--image_caching", type=bool, default=True)
 
-    args, _ = parser.parse_known_args()
+    main(parser.parse_args())
 
-    # main(parser.parse_args())
-
-    try:
-        # get parameters form tuner
-        tuner_params = nni.get_next_parameter()
-        logger.debug(tuner_params)
-        # tuner_params
-        params = merge_parameter(args, tuner_params)
-        main(params)
-
-    except Exception as exception:
-        logger.exception(exception)
-        raise
