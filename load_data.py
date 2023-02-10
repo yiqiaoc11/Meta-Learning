@@ -132,9 +132,6 @@ class DataGenerator(IterableDataset):
             1 query.
         """
 
-        #############################
-        #### YOUR CODE GOES HERE ####
-
         labels_files = get_images(random.sample(self.folders, self.num_classes), [i for i in range(self.num_classes)], self.num_samples_per_class, False)
 
         j = self.num_samples_per_class-1
@@ -161,7 +158,6 @@ class DataGenerator(IterableDataset):
 
         return (i, l)
 
-        #############################
 
     def __iter__(self):
         while True:
