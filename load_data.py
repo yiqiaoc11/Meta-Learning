@@ -9,8 +9,6 @@ import pdb
 
 def get_images(paths, labels, nb_samples=None, shuffle=True):
     """
-    Takes a set of character folders and labels and returns paths to image files
-    paired with labels.
     Args:
         paths: A list of character folders
         labels: List or numpy array of same length as paths
@@ -118,18 +116,6 @@ class DataGenerator(IterableDataset):
                 1. image batch has shape [K+1, N, 784] and
                 2. label batch has shape [K+1, N, N]
             where K is the number of "shots", N is number of classes
-        Note:
-            1. The numpy functions np.random.shuffle and np.eye (for creating)
-            one-hot vectors would be useful.
-
-            2. For shuffling, remember to make sure images and labels are shuffled
-            in the same order, otherwise the one-to-one mapping between images
-            and labels may get messed up. Hint: there is a clever way to use
-            np.random.shuffle here.
-            
-            3. The value for `self.num_samples_per_class` will be set to K+1 
-            since for K-shot classification you need to sample K supports and 
-            1 query.
         """
 
         labels_files = get_images(random.sample(self.folders, self.num_classes), [i for i in range(self.num_classes)], self.num_samples_per_class, False)
